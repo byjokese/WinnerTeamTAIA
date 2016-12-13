@@ -133,6 +133,10 @@ if (Length > 0) {
                 .nth(6, AimedAgent, NewDestination);
                 ?debug(Mode); if (Mode<=1) { .println("NUEVO DESTINO DEBERIA SER: ", NewDestination); }
           
+	  	update_destination(NewDestination);
+		!add_task(task(2000,"TASK_ATTACK","Manager",NewDestination, ""));
+	  	-+state(standing);
+	  
             }
  .
 
