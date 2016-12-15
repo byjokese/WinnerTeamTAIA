@@ -181,9 +181,9 @@ if (Length > 0) {
 	  	update_destination(NewDestination);
 		
 		!agent_in_the_middle( Xv, Y, Z );
-		?agent_in_the_middle( Isthereagent );
+		?agent_in_the_middle( AgenteEnMedio );
 
-		if ( Isthereagent == "false" ) {
+		if ( AgenteEnMedio == "false" ) {
 			!add_task(task(2000,"TASK_ATTACK","Manager",NewDestination, ""));
 		}
 	  	-+state(standing);
