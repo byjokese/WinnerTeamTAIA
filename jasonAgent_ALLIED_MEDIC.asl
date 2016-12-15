@@ -103,6 +103,53 @@ if (Length > 0) {
         !look.
       
         
+///////////Agente en medio (agent_in_the_middle)
++!agent_in_the_middle( Xe, Ye, Ze )
+	<-
+	+allies( [] );
+	?fovObjects( FOVObjects );
+	.length( FOVObjects, Length );
+	-+agent_in_the_middle( "false" );
+	-+bucle( 0 );
+	while ( bucle( X ) & ( X < Length ) ) {
+		.nth( X, FOVObjects, Object );
+		// Object structure
+		// [#, TEAM, TYPE, ANGLE, DISTANCE, HEALTH, POSITION ]
+		.nth( 1, Object, Team );
+		if ( team( "ALLIED" ) ) {
+			if ( Team == 100 ) { // Only if I'm ALLIED
+				?allies( Ally );
+				.concat( Ally, [Object], Allies );
+				-+allies( Allies );
+			}
+		} else {
+			if ( Team == 200 ) { // Only if I'm ALLIED
+				?allies( Ally );
+				.concat( Ally, [Object], Allies );
+				-+allies( Allies );
+			}
+		}
+		-+bucle( X + 1 );
+	}
+
+	?allies( Allies );
+	.length( Allies, AlliesLength );
+	+auxM( 0 );
+	while ( auxM( C ) & C < AlliesLength ) {
+		.nth( C, Allies, Target );
+		.nth( 6, Target, Posicion );
+		-+posMiddle( Posicion );
+		?posMiddle( pos( Xa, Ya, Za ) );
+		?my_position( X, Y, Z );
+		if ( math.abs( ( Ze - Z ) * ( Xa - X ) - ( Xe - X ) * ( Za - Z ) ) <= 0 ) {
+			-+agent_in_the_middle( "true" );
+		}
+		-+auxM( C + 1 );
+	}
+	-auxM( _ );
+	-bucle( _ )
+.
+   
 /////////////////////////////////
 //  PERFORM ACTIONS
 /////////////////////////////////
@@ -132,12 +179,17 @@ if (Length > 0) {
                 ?debug(Mode); if (Mode<=1) { .println("NUEVO DESTINO DEBERIA SER: ", NewDestination); }
           
 	  	update_destination(NewDestination);
-		!add_task(task(2000,"TASK_ATTACK","Manager",NewDestination, ""));
+		
+		!agent_in_the_middle( Xv, Y, Z );
+		?agent_in_the_middle( Isthereagent );
+
+		if ( Isthereagent == "false" ) {
+			!add_task(task(2000,"TASK_ATTACK","Manager",NewDestination, ""));
+		}
 	  	-+state(standing);
 	  
             }
- .
-
+.
 /**
 * Action to do when the agent is looking at.
 *
